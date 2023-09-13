@@ -13,7 +13,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t kritz4/devops-integration .'
+                    bat 'docker build -t kritz4/devops-integration .'
                 }
             }
         }
@@ -21,10 +21,10 @@ pipeline {
             steps{
                 script{
                    withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-                   sh 'docker login -u kritz4 -p ${dockerhubpwd}'
+                   bat 'docker login -u kritz4 -p ${dockerhubpwd}'
 
 }
-                   sh 'docker push kritz4/devops-integration'
+                   bat 'docker push kritz4/devops-integration'
                 }
             }
         }
