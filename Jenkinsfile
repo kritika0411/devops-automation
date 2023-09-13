@@ -20,8 +20,8 @@ pipeline {
         stage('Push image to Hub'){
             steps{
                 script{
-                   withCredentials([string(credentialsId: 'd2jenkins', variable: 'd2jenkins')]) {
-                   bat 'docker login -u $d2jenkins --password-stdin'
+                   withCredentials([string(credentialsId: 'docker-reg-jenkins', variable: 'docker-reg-jenkins')]) {
+                   bat 'docker login -u $docker-reg-jenkins --password-stdin'
 
 }
                    bat 'docker push kritz4/devops-integration'
