@@ -21,19 +21,13 @@ pipeline {
             steps{
                 script{
                    withCredentials([string(credentialsId: 'docker-reg-jenkins', variable: 'docker-reg-jenkins')]) {
-                   bat 'docker login -u $docker-reg-jenkins --password-stdin'
+                   bat 'docker login -u kritz4 -p ${docker-reg-jenkins}'
 
 }
                    bat 'docker push kritz4/devops-integration'
                 }
             }
         }
-        stage('Deploy to k8s'){
-            steps{
-                script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
-                }
-            }
-        }
+        
     }
 }
