@@ -1,12 +1,16 @@
 pipeline {
     agent any
     tools{
-       maven 'MAVEN'
+        maven 'MAVEN'
     }
+    
+    environment {     
+    DOCKERHUB_CREDENTIALS= credentials('newdockerhub')     
+} 
     stages{
         stage('Build Maven'){
             steps{
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kritika0411/devops-automation.git']])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/kritika0411/devops-automation.git']]])
                 bat 'mvn clean install'
             }
         }
@@ -17,7 +21,17 @@ pipeline {
                 }
             }
         }
-        
+        stage('Push image to Hub'){
+            steps{
+                script{
+                  withCredentials([string(credentialsId: 'newdockerhub', variable: 'newdockerhub')]){
+                   bat 'docker login -u kritz4 -p %newdockerhub%'
+
+}
+                   bat 'docker push kritz4/devops-integration'
+                }
             }
         }
- 
+        
+    }
+}
